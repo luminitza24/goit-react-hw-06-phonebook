@@ -1,13 +1,15 @@
 import './Search.css';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFilters } from 'redux/selector';
+import { changeTextFilter } from 'redux/filterSlice';
 
-export const Search = ({ onFilter }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const handleChange = evt => {
-    const { value } = evt.target;
-    setSearchTerm(value);
-    onFilter(value);
+export const Search = () => {
+  const dispatch = useDispatch();
+  const filters = useSelector(getFilters);
+
+  const handleFilterChange = evt => {
+    const name = evt.target.value;
+    dispatch(changeTextFilter(name));
   };
   return (
     <>
@@ -17,14 +19,10 @@ export const Search = ({ onFilter }) => {
           autoComplete="off"
           type="text"
           className="input"
-          value={searchTerm}
-          onChange={handleChange}
+          value={filters.textFilter}
+          onChange={handleFilterChange}
         />
       </label>
     </>
   );
-};
-
-Search.propTypes = {
-  onFilter: PropTypes.func.isRequired,
 };
